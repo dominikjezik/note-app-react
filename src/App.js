@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import { useContext, useLayoutEffect, useState } from 'react'
+import './App.scss';
+import Sidebar from './components/Sidebar';
+import Main from './components/Main';
+import { NotesContext } from './context/NotesContext'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const { width } = useWindowSize()
+    const { selectedNote } = useContext(NotesContext)
+    let classes = "container"
+
+    if(width < 1000) {
+        classes += " mobile-mode"
+
+        if(selectedNote.id)
+            classes += " note-full-screen"
+    }
+
+    return (
+        <div className={classes}>
+            <Sidebar />
+            <Main />
+        </div>
+    );
+}
+
+function useWindowSize() {
+    const [size, setSize] = useState([0, 0]);
+    useLayoutEffect(() => {
+        function updateSize() {
+            setSize({width: window.innerWidth, height: window.innerHeight});
+        }
+        window.addEventListener('resize', updateSize);
+        updateSize();
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
+    return size;
 }
 
 export default App;
