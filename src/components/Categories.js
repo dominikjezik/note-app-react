@@ -22,6 +22,7 @@ function Categories({ selectedCategory, onSelect }) {
         <div className="categories">
             { COLORS.map(color => (
                 <div 
+                    key={color}
                     onClick={() => selectCategory(color) } 
                     className={
                         `category category-${color} ${ selectedCategory === color ? "category-selected" : ""}`
