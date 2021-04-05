@@ -13,7 +13,7 @@ function NoteItem({ note, selectNote, selectedNote }) {
             </div>
             <div className="row">
                 <span className="body-preview">{ getPreviewOfText(note.body) }</span>
-                <span className="date">{ moment(note.created_at).fromNow() }</span>
+                <span className="date">{ moment(note.updated_at).fromNow() }</span>
             </div>
         </li>
     )

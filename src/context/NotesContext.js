@@ -1,28 +1,33 @@
-import React, { useState, createContext } from 'react'
+import React, { useState, createContext, useEffect } from 'react'
 import { uuid } from 'uuidv4';
 
 export const NotesContext = createContext();
 
 export const NotesProvider = ({ children }) => {
-    const [notes, setNotes] = useState([
-        {
-            id: 1,
-            title: "Chocolate gingerbread gummies",
-            body: "Tootsie roll pastry chupa chups lemon drops tart wafer biscuit danish. Carrot cake lollipop pastry jelly sweet roll. Oat cake gummi bears cheesecake sweet dessert cupcake. Candy caramels danish candy oat cake cheesecake chupa chups gummi bears. Bear claw fruitcake icing halvah candy canes gummies lemon drops cake.",
-            created_at: new Date(),
-            category: ""
-        },
-        {
-            id: 2,
-            title: "Gummies cheesecake chocolate bar",
-            body: "Icing powder gummies pie sugar plum cake. Macaroon jelly dragée macaroon donut marzipan. Cupcake tiramisu wafer cookie. Halvah cake candy bonbon candy canes soufflé halvah marshmallow. Tiramisu pastry toffee bonbon cookie macaroon. Gummi bears icing gummies cotton candy gummi bears jelly. Liquorice macaroon powder chocolate cake sesame snaps sugar plum.",
-            created_at: new Date(),
-            category: ""
-        }
-    ])
+    const [notes, setNotes] = useState([])
 
     const [selectedNote, setSelectedNote] = useState({})
     const [editMode, setEditMode] = useState(false)
+
+    useEffect(() => {
+        const notes = fetchNotesFromLocalStorage()
+        setNotes(notes)
+    }, [])
+
+    useEffect(() => {
+        updateNotesInLocalStorage()
+    }, [notes])
+
+    const fetchNotesFromLocalStorage = () => {
+        let notes = window.localStorage.getItem('notes');
+        notes = JSON.parse(notes)
+        return notes === null ? [] : notes
+    }
+
+    const updateNotesInLocalStorage = () => {
+        let json = JSON.stringify(notes)
+        window.localStorage.setItem('notes', json)
+    }
 
     const selectNote = (note) => {
         setSelectedNote(note)
@@ -34,7 +39,7 @@ export const NotesProvider = ({ children }) => {
             id: uuid(),
             title: "untitled",
             body: "",
-            created_at: new Date()
+            updated_at: new Date()
         }
 
         const modifiedNotes = notes
@@ -52,11 +57,13 @@ export const NotesProvider = ({ children }) => {
         note.title = title
         note.body = body
         note.category = category
+        note.updated_at =  new Date()
 
         modifiedNotes.unshift(note)
 
         setNotes(modifiedNotes)
         setEditMode(false)
+        updateNotesInLocalStorage()
     }
 
     const deleteNote = (id) => {
