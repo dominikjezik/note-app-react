@@ -1,6 +1,6 @@
 # Simple Note App
 
-The app is created in React JS and runs on [note.dominikjezik.sk](https://note.dominikjezik.sk). The app saves notes to localstorage in a web browser.
+The app is created in React JS and runs on [note.dominikjezik.sk](https://note.dominikjezik.sk). The app saves notes to localstorage in a web browser. The app can be used as PWA (Progressive Web App).
 
 ## Available Scripts
 
